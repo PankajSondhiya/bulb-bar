@@ -1,25 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component } from "react";
+import "./App.css";
+import Navbaar from "./Navbaar";
+import Bulb from "./bulb";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      display: [
+        { id: 1, status: "off" },
+        { id: 2, status: "off" },
+      ],
+    };
+  }
+  getstatus = () => {
+    if (
+      this.state.display[0].status === "on" ||
+      this.state.display[1].status === "on"
+    ) {
+      return "on";
+    }
+    return "off";
+  };
+
+  gettoggle = (id) => {
+    let newdisplay = [...this.state.display];
+    let bulb = newdisplay.find((bulb) => bulb.id === id);
+    if (bulb.status === "on") {
+      bulb.status = "off";
+    } else {
+      bulb.status = "on";
+    }
+    this.setState({ display: newdisplay });
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <Navbaar status={this.getstatus()} />
+        <Bulb
+          status={this.state.display[0].state}
+          toggle={() => this.gettoggle(0)}
+        />
+        <Bulb
+          status={this.state.display[1].state}
+          toggle={() => this.gettoggle(1)}
+        />
+      </div>
+    );
+  }
 }
-
-export default App;
